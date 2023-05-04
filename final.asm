@@ -44,8 +44,6 @@ section .bss
 
 	action	resw	1
 
-	total	resw	1
-
 	
 
 section .data
@@ -90,10 +88,6 @@ stack:
 
 	jge	stack
 
-	
-
-	mov	rsi, 0
-
 
 
 	;n1 = first input number
@@ -101,10 +95,6 @@ stack:
 	xor	rax, rax
 
 	pop	rax			;ax = top of stack
-
-	cmp	ax, 0
-
-	je	printing
 
 	sub	ax, 41
 
@@ -122,15 +112,13 @@ atoi:
 
 	;extract n2
 
-	inc	rsi
-
 	xor	rax, rax
 
 	pop	rax			;ax = top of stack
 
 	cmp	ax, 10
 
-	je	printing
+	je	itoa
 
 	sub	ax, 41
 
@@ -142,13 +130,17 @@ atoi:
 
 	mov	word[n2], ax
 
-	jmp	atoi
+	jmp	decide
 
 	
 
 operator:
 
 	mov	word[action], ax
+
+	jmp	atoi
+
+decide:
 
 	cmp	word[n2], 0
 
@@ -198,29 +190,19 @@ subtraction:
 
 division:
 
+
+
+itoa:
+
+	mov	ax, word[n1]
+
+	add	ax, 48	
+
+	mov	word[n1], ax
+
 	
 
-	mov	rbx, 10
-
-	mov	rcx, 10
-
-printing:
-
-	;total = itoa(n1)
-
-	xor	rax, rax
-
-	movzx	rax, word[n1]
-
-	div	rbx
-
-	add	rdx, "0"
-
-	mov	byte[total+rcx], dl
-
-	loop	printing
-
-	print	total, 10
+	print	n1, 10
 
 	
 
