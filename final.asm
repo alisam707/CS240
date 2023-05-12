@@ -378,21 +378,19 @@ convert10000:
 
 	
 
-itoabegin:
+itoa:
 
-	mov	r10, 6
-
-	xor	rdx, rdx
+	mov	r10, 5
 
 	mov	bx, 10
 
-	mov	ax, word[ascii10000]
+	mov	ax, word[n1]
 
 
 
 betteritoa:
 
-	xor	rax, rax
+	dec	r10
 
 	xor	rdx, rdx
 
@@ -404,7 +402,17 @@ betteritoa:
 
 	jge	betteritoa
 
-	xor	r10, r10
+	mov	r10, 0
+
+	mov	r8, 6
+
+	
+
+	movzx	ax, byte[ascii10000]
+
+	cmp	ax, 48
+
+	jne	printing
 
 itoacntr:
 
@@ -416,18 +424,39 @@ itoacntr:
 
 	xor	rax, rax
 
-	cmp	byte[ascii10000+r10], 0
-
 	inc	r10
+
+	dec	r8
+
+	movzx	ax, byte[ascii10000+r10]
+
+	cmp	ax, 48
 
 	je	itoacntr
 
-	
+	xor	rax, rax
+
+	mov	rax, ascii10000
+
+	add	rax, r10
+
+	movzx	ascii10000, rax
+
+	print	msg2, 8
+
+	print	ascii10000, r8
+
+	jmp	end
 
 	
 
+	
 
+printing:
 
+	print	msg2, 8
+
+	print	ascii10000, 6
 
 
 end:
